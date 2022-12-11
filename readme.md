@@ -2,5 +2,5 @@
 
 https://grpc.io/docs/protoc-installation/
 
-### install evans 
+### install evan
 https://github.com/ktr0731/evan

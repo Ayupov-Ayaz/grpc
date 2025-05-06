@@ -1,10 +1,13 @@
 syntax = "proto3";
 
-package api;
-option go_package = "pkg/api";
+package api.v1;
+
+option go_package = "github.com/Ayupov-Ayaz/grpc/gen/go/api/v1;api";
 
 service TransactionService {
-  rpc Bet (BetRequest) returns (BetResponse);
+  rpc Bet (BetRequest) returns (BetResponse){
+    option idempotency_level = IDEMPOTENT;
+  };
 }
 
 message BetRequest {

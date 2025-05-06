@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package api;
+option go_package = "pkg/api";
+
+service TransactionService {
+  rpc Bet (BetRequest) returns (BetResponse);
+}
+
+message BetRequest {
+  string operation_id = 1;
+  string user_id = 2;
+  uint64 amount = 3;
+}
+
+
+message BetResponse {
+  string operation_id = 1;
+  uint64 balance = 2;
+}

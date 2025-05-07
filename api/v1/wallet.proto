@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package api.v1;
+
+option go_package = "github.com/Ayupov-Ayaz/grpc/gen/go/api/v1;api";
+
+
+service WalletService {
+    rpc CreateWallet (CreateWalletRequest) returns (CreateWalletResponse);
+    rpc GetBalance (GetBalanceRequest) returns (GetBalanceResponse);
+    rpc DeleteWallet (DeleteWalletRequest) returns (DeleteWalletResponse);
+}
+
+
+message CreateWalletRequest {
+    string user_id = 1;
+    int64 balance = 2;
+}
+
+message CreateWalletResponse {
+    int64 balance = 1;
+}
+
+message GetBalanceRequest {
+    string user_id = 1;
+}
+
+message GetBalanceResponse {
+    string wallet_id = 1;
+    int64 balance = 2;
+}
+
+message DeleteWalletRequest {
+    string user_id = 1;
+}
+
+message DeleteWalletResponse {
+    string wallet_id = 1;
+}

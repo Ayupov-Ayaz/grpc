@@ -8,6 +8,9 @@ service TransactionService {
   rpc Bet (BetRequest) returns (BetResponse){
     option idempotency_level = IDEMPOTENT;
   };
+  rpc Win (WinRequest) returns (WinResponse){
+    option idempotency_level = IDEMPOTENT;
+  };
 }
 
 message BetRequest {
@@ -19,5 +22,18 @@ message BetRequest {
 
 message BetResponse {
   string operation_id = 1;
-  uint64 balance = 2;
+  int64 balance = 2;
+}
+
+
+message WinRequest {
+  string operation_id = 1;
+  string bet_operation_id = 2;
+  string user_id = 3;
+  uint64 amount = 4;
+}
+
+message WinResponse {
+  string operation_id = 1;
+  int64 balance = 2;
 }

@@ -58,7 +58,7 @@
 
 | Name | Number | Description |
 | ---- | ------ | ----------- |
-| VIOLATION_TYPE_UNSPECIFIED | 0 | ViolationTypeUnspecified is used when the violation type is not specified. |
+| VIOLATION_TYPE_UNSPECIFIED | 0 |  |
 | VIOLATION_TYPE_INSUFFICIENT_FUNDS | 1 |  |
 
 

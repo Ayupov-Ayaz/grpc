@@ -72,7 +72,6 @@ func (ResourceType) EnumDescriptor() ([]byte, []int) {
 type ViolationType int32
 
 const (
-	// ViolationTypeUnspecified is used when the violation type is not specified.
 	ViolationType_VIOLATION_TYPE_UNSPECIFIED        ViolationType = 0
 	ViolationType_VIOLATION_TYPE_INSUFFICIENT_FUNDS ViolationType = 1
 )

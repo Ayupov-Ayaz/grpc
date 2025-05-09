@@ -13,7 +13,7 @@ func ErrNotFound(userID string) *NotFoundError {
 func (e *NotFoundError) UserID() string { return e.userID }
 
 func (e *NotFoundError) Error() string {
-	return "wallet not found"
+	return "user " + e.userID + " wallet not found"
 }
 
 type AlreadyExistsError struct {
@@ -29,7 +29,7 @@ func ErrAlreadyExist(userID string) *AlreadyExistsError {
 func (e *AlreadyExistsError) UserID() string { return e.userID }
 
 func (e *AlreadyExistsError) Error() string {
-	return "wallet already exists"
+	return "user " + e.userID + " wallet already exists"
 }
 
 type InsufficientFundsError struct {

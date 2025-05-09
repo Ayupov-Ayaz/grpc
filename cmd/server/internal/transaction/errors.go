@@ -12,7 +12,7 @@ func ErrNotFound(transactionID ID) *NotFoundError {
 func (e *NotFoundError) TransactionID() ID { return e.transactionID }
 
 func (e *NotFoundError) Error() string {
-	return "transaction not found"
+	return "transaction " + e.transactionID.String() + " not found"
 }
 
 type AlreadyExistsError struct {
@@ -28,5 +28,5 @@ func ErrAlreadyExists(transactionID ID) *AlreadyExistsError {
 func (e *AlreadyExistsError) TransactionID() ID { return e.transactionID }
 
 func (e *AlreadyExistsError) Error() string {
-	return "transaction already exists"
+	return "transaction " + e.transactionID.String() + " already exists"
 }

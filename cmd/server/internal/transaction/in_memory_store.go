@@ -1,6 +1,7 @@
 package transaction
 
 import (
+	"context"
 	"sync"
 )
 
@@ -18,7 +19,9 @@ func NewInMemoryStore() *InMemoryStore {
 	}
 }
 
-func (s *InMemoryStore) SetTransactionID(userID, operationID string) error {
+func (s *InMemoryStore) SetTransactionID(
+	_ context.Context, userID, operationID string,
+) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -34,7 +37,9 @@ func (s *InMemoryStore) SetTransactionID(userID, operationID string) error {
 	return nil
 }
 
-func (s *InMemoryStore) CheckTransactionID(userID, operationID string) error {
+func (s *InMemoryStore) CheckTransactionID(
+	_ context.Context, userID, operationID string,
+) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 

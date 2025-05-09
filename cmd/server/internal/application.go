@@ -29,12 +29,12 @@ func NewApplication(
 func (a *Application) CreateWallet(
 	ctx context.Context, req *api.CreateWalletRequest,
 ) (*api.CreateWalletResponse, error) {
-	err := a.wallet.CreateWallet(req.GetUserId())
+	err := a.wallet.CreateWallet(ctx, req.GetUserId())
 	if err != nil {
 		return nil, wrapCreateWalletError(err)
 	}
 
-	balance, err := a.wallet.Add(req.GetUserId(), uint64(req.GetBalance()))
+	balance, err := a.wallet.Add(ctx, req.GetUserId(), uint64(req.GetBalance()))
 	if err != nil {
 		return nil, wrapChangeWalletError(err)
 	}
@@ -44,13 +44,20 @@ func (a *Application) CreateWallet(
 	}, nil
 }
 
-func (a *Application) Bet(ctx context.Context, req *api.BetRequest) (*api.BetResponse, error) {
-	err := a.transaction.SetTransactionID(req.GetUserId(), req.GetId())
+func (a *Application) Bet(
+	ctx context.Context, req *api.BetRequest,
+) (*api.BetResponse, error) {
+	err := a.wallet.CheckWallet(ctx, req.GetUserId())
+	if err != nil {
+		return nil, wrapChangeWalletError(err)
+	}
+
+	err = a.transaction.SetTransactionID(ctx, req.GetUserId(), req.GetId())
 	if err != nil {
 		return nil, wrapSetTransactionError(err)
 	}
 
-	balance, err := a.wallet.Subtract(req.GetUserId(), req.GetAmount())
+	balance, err := a.wallet.Subtract(ctx, req.GetUserId(), req.GetAmount())
 	if err != nil {
 		return nil, wrapChangeWalletError(err)
 	}
@@ -61,17 +68,23 @@ func (a *Application) Bet(ctx context.Context, req *api.BetRequest) (*api.BetRes
 }
 
 func (a *Application) Win(ctx context.Context, req *api.WinRequest) (*api.WinResponse, error) {
-	err := a.transaction.CheckTransactionID(req.GetUserId(), req.GetBetTransactionId())
+	err := a.wallet.CheckWallet(ctx, req.GetUserId())
+	if err != nil {
+		return nil, wrapChangeWalletError(err)
+	}
+
+	err = a.transaction.CheckTransactionID(ctx,
+		req.GetUserId(), req.GetBetTransactionId())
 	if err != nil {
 		return nil, wrapCheckBetTransactionError(err)
 	}
 
-	err = a.transaction.SetTransactionID(req.GetUserId(), req.GetId())
+	err = a.transaction.SetTransactionID(ctx, req.GetUserId(), req.GetId())
 	if err != nil {
 		return nil, wrapSetTransactionError(err)
 	}
 
-	balance, err := a.wallet.Add(req.GetUserId(), req.GetAmount())
+	balance, err := a.wallet.Add(ctx, req.GetUserId(), req.GetAmount())
 	if err != nil {
 		return nil, wrapChangeWalletError(err)
 	}

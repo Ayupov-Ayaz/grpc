@@ -1,6 +1,9 @@
 package wallet
 
-import "sync"
+import (
+	"context"
+	"sync"
+)
 
 type InMemoryStore struct {
 	mu         *sync.Mutex
@@ -16,7 +19,9 @@ func NewInMemoryStore() *InMemoryStore {
 	}
 }
 
-func (s *InMemoryStore) CreateWallet(userID string) error {
+func (s *InMemoryStore) CreateWallet(
+	_ context.Context, userID string,
+) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -29,7 +34,9 @@ func (s *InMemoryStore) CreateWallet(userID string) error {
 	return nil
 }
 
-func (s *InMemoryStore) Add(userID string, amount uint64) (int64, error) {
+func (s *InMemoryStore) Add(
+	_ context.Context, userID string, amount uint64,
+) (int64, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -45,7 +52,9 @@ func (s *InMemoryStore) Add(userID string, amount uint64) (int64, error) {
 	return balance, nil
 }
 
-func (s *InMemoryStore) Subtract(userID string, amount uint64) (int64, error) {
+func (s *InMemoryStore) Subtract(
+	_ context.Context, userID string, amount uint64,
+) (int64, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -65,7 +74,9 @@ func (s *InMemoryStore) Subtract(userID string, amount uint64) (int64, error) {
 	return balance, nil
 }
 
-func (s *InMemoryStore) GetBalance(userID string) (int64, error) {
+func (s *InMemoryStore) GetBalance(
+	_ context.Context, userID string,
+) (int64, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -77,7 +88,9 @@ func (s *InMemoryStore) GetBalance(userID string) (int64, error) {
 	return balance, nil
 }
 
-func (s *InMemoryStore) CheckWallet(userID string) error {
+func (s *InMemoryStore) CheckWallet(
+	_ context.Context, userID string,
+) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 

@@ -1,6 +1,8 @@
 package transaction
 
+import "context"
+
 type Store interface {
-	SetTransactionID(userID, operationID string) error
-	CheckTransactionID(userID, operationID string) error
+	SetTransactionID(ctx context.Context, userID, operationID string) error
+	CheckTransactionID(ctx context.Context, userID, operationID string) error
 }

@@ -37,7 +37,7 @@ const (
 
 func wrapCreateWalletError(err error) error {
 	if e := new(wallet.NotFoundError); errors.As(err, &e) {
-		return newWalletNotFoundGRPCError(e)
+		return errWalletNotFoundGRPCError(e)
 	}
 
 	if e := new(wallet.AlreadyExistsError); errors.As(err, &e) {
@@ -49,7 +49,7 @@ func wrapCreateWalletError(err error) error {
 
 func wrapChangeWalletError(err error) error {
 	if e := new(wallet.NotFoundError); errors.As(err, &e) {
-		return newWalletNotFoundGRPCError(e)
+		return errWalletNotFoundGRPCError(e)
 
 	}
 
@@ -81,7 +81,7 @@ func errWalletAlreadyExistsGRPC(err *wallet.AlreadyExistsError) error {
 		newWalletResourceInfo(err))
 }
 
-func newWalletNotFoundGRPCError(err *wallet.NotFoundError) error {
+func errWalletNotFoundGRPCError(err *wallet.NotFoundError) error {
 	return NewGRPCError(codes.NotFound, "wallet not found",
 		newWalletResourceInfo(err))
 }

@@ -63,7 +63,8 @@ func (a *Application) Bet(
 	}
 
 	return &api.BetResponse{
-		Balance: balance,
+		Balance:       balance,
+		TransactionId: req.GetId(),
 	}, nil
 }
 
@@ -90,6 +91,7 @@ func (a *Application) Win(ctx context.Context, req *api.WinRequest) (*api.WinRes
 	}
 
 	return &api.WinResponse{
-		Balance: balance,
+		Balance:       balance,
+		TransactionId: req.GetId(),
 	}, nil
 }

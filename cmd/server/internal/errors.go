@@ -16,16 +16,6 @@ import (
 	api "github.com/Ayupov-Ayaz/grpc/gen/go/aayupov/wallet/v1alpha1"
 )
 
-type walletError interface {
-	UserID() string
-	Error() string
-}
-
-type transactionError interface {
-	TransactionID() transaction.ID
-	Error() string
-}
-
 const (
 	walletResourceType      = api.ResourceType_RESOURCE_TYPE_WALLET
 	transactionResourceType = api.ResourceType_RESOURCE_TYPE_TRANSACTION
@@ -78,12 +68,12 @@ func wrapSetTransactionError(err error) error {
 
 func errWalletAlreadyExistsGRPC(err *wallet.AlreadyExistsError) error {
 	return NewGRPCError(codes.AlreadyExists, "wallet already exists",
-		newWalletResourceInfo(err))
+		newWalletResourceInfo(err.UserID(), err))
 }
 
 func errWalletNotFoundGRPCError(err *wallet.NotFoundError) error {
 	return NewGRPCError(codes.NotFound, "wallet not found",
-		newWalletResourceInfo(err))
+		newWalletResourceInfo(err.UserID(), err))
 }
 
 func errInsufficientFundsGRPC(err *wallet.InsufficientFundsError) error {
@@ -105,12 +95,12 @@ func errInsufficientFundsGRPC(err *wallet.InsufficientFundsError) error {
 
 func errTransactionNotFoundGRPC(err *transaction.NotFoundError) error {
 	return NewGRPCError(codes.NotFound, "transaction not found",
-		newTransactionResourceInfo(err))
+		newTransactionResourceInfo(err.TransactionID(), err))
 }
 
 func errTransactionAlreadyExists(err *transaction.AlreadyExistsError) error {
 	return NewGRPCError(codes.AlreadyExists, "transaction already exists",
-		newTransactionResourceInfo(err))
+		newTransactionResourceInfo(err.TransactionID(), err))
 }
 
 func NewGRPCError(
@@ -132,21 +122,21 @@ func NewGRPCError(
 	return s.Err()
 }
 
-func newTransactionResourceInfo(tErr transactionError) *errdetails.ResourceInfo {
+func newTransactionResourceInfo(trID transaction.ID, err error) *errdetails.ResourceInfo {
 	return &errdetails.ResourceInfo{
 		ResourceType: transactionResourceType.String(),
-		ResourceName: transactionResourceName(tErr.TransactionID()),
-		Owner:        tErr.TransactionID().GetUserID(),
-		Description:  tErr.Error(),
+		ResourceName: transactionResourceName(trID),
+		Owner:        trID.GetUserID(),
+		Description:  err.Error(),
 	}
 }
 
-func newWalletResourceInfo(wErr walletError) *errdetails.ResourceInfo {
+func newWalletResourceInfo(userID string, err error) *errdetails.ResourceInfo {
 	return &errdetails.ResourceInfo{
 		ResourceType: walletResourceType.String(),
-		ResourceName: walletResourceName(wErr.UserID()),
-		Owner:        wErr.UserID(),
-		Description:  wErr.Error(),
+		ResourceName: walletResourceName(userID),
+		Owner:        userID,
+		Description:  err.Error(),
 	}
 }
 

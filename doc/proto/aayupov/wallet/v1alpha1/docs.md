@@ -223,11 +223,6 @@
 
 
 
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| wallet_id | [string](#string) |  |  |
-
-
 
 
 
@@ -255,7 +250,6 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| wallet_id | [string](#string) |  |  |
 | balance | [int64](#int64) |  |  |
 
 

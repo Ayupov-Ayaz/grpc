@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: api/v1/transactions.proto
+// source: aayupov/wallet/v1alpha1/transactions.proto
 
-package api
+package wallet
 
 import (
 	context "context"
@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TransactionService_Bet_FullMethodName = "/api.v1.TransactionService/Bet"
-	TransactionService_Win_FullMethodName = "/api.v1.TransactionService/Win"
+	TransactionService_Bet_FullMethodName = "/aayupov.wallet.v1alpha1.TransactionService/Bet"
+	TransactionService_Win_FullMethodName = "/aayupov.wallet.v1alpha1.TransactionService/Win"
 )
 
 // TransactionServiceClient is the client API for TransactionService service.
@@ -142,7 +142,7 @@ func _TransactionService_Win_Handler(srv interface{}, ctx context.Context, dec f
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var TransactionService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1.TransactionService",
+	ServiceName: "aayupov.wallet.v1alpha1.TransactionService",
 	HandlerType: (*TransactionServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -155,5 +155,5 @@ var TransactionService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/v1/transactions.proto",
+	Metadata: "aayupov/wallet/v1alpha1/transactions.proto",
 }

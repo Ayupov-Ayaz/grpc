@@ -1,12 +1,13 @@
 package transaction
 
 import (
+	"context"
 	"sync"
 )
 
 type InMemoryStore struct {
 	mu          *sync.Mutex
-	transaction map[id]struct{}
+	transaction map[ID]struct{}
 }
 
 var _ Store = (*InMemoryStore)(nil)
@@ -14,11 +15,13 @@ var _ Store = (*InMemoryStore)(nil)
 func NewInMemoryStore() *InMemoryStore {
 	return &InMemoryStore{
 		mu:          &sync.Mutex{},
-		transaction: make(map[id]struct{}),
+		transaction: make(map[ID]struct{}),
 	}
 }
 
-func (s *InMemoryStore) SetTransactionID(userID, operationID string) error {
+func (s *InMemoryStore) SetTransactionID(
+	_ context.Context, userID, operationID string,
+) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -26,7 +29,7 @@ func (s *InMemoryStore) SetTransactionID(userID, operationID string) error {
 
 	exist := s.hasTransactionIDs(transactionID)
 	if exist {
-		return ErrTransactionAlreadyExists
+		return ErrAlreadyExists(transactionID)
 	}
 
 	s.setTransactionID(transactionID)
@@ -34,7 +37,9 @@ func (s *InMemoryStore) SetTransactionID(userID, operationID string) error {
 	return nil
 }
 
-func (s *InMemoryStore) CheckTransactionID(userID, operationID string) error {
+func (s *InMemoryStore) CheckTransactionID(
+	_ context.Context, userID, operationID string,
+) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -42,18 +47,17 @@ func (s *InMemoryStore) CheckTransactionID(userID, operationID string) error {
 
 	exist := s.hasTransactionIDs(transactionID)
 	if !exist {
-		return ErrTransactionNotFound
+		return ErrNotFound(transactionID)
 	}
 
 	return nil
 }
 
-func (s *InMemoryStore) hasTransactionIDs(transactionID id) bool {
+func (s *InMemoryStore) hasTransactionIDs(transactionID ID) bool {
 	_, ok := s.transaction[transactionID]
-
 	return ok
 }
 
-func (s *InMemoryStore) setTransactionID(transactionID id) {
+func (s *InMemoryStore) setTransactionID(transactionID ID) {
 	s.transaction[transactionID] = struct{}{}
 }

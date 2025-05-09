@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             (unknown)
-// source: api/v1/wallet.proto
+// source: aayupov/wallet/v1alpha1/wallet.proto
 
-package api
+package wallet
 
 import (
 	context "context"
@@ -19,9 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	WalletService_CreateWallet_FullMethodName = "/api.v1.WalletService/CreateWallet"
-	WalletService_GetBalance_FullMethodName   = "/api.v1.WalletService/GetBalance"
-	WalletService_DeleteWallet_FullMethodName = "/api.v1.WalletService/DeleteWallet"
+	WalletService_CreateWallet_FullMethodName = "/aayupov.wallet.v1alpha1.WalletService/CreateWallet"
+	WalletService_GetBalance_FullMethodName   = "/aayupov.wallet.v1alpha1.WalletService/GetBalance"
+	WalletService_DeleteWallet_FullMethodName = "/aayupov.wallet.v1alpha1.WalletService/DeleteWallet"
 )
 
 // WalletServiceClient is the client API for WalletService service.
@@ -176,7 +176,7 @@ func _WalletService_DeleteWallet_Handler(srv interface{}, ctx context.Context, d
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var WalletService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1.WalletService",
+	ServiceName: "aayupov.wallet.v1alpha1.WalletService",
 	HandlerType: (*WalletServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -193,5 +193,5 @@ var WalletService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/v1/wallet.proto",
+	Metadata: "aayupov/wallet/v1alpha1/wallet.proto",
 }

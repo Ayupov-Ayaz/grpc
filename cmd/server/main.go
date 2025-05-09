@@ -12,7 +12,7 @@ import (
 	"github.com/Ayupov-Ayaz/grpc/cmd/server/internal"
 	"github.com/Ayupov-Ayaz/grpc/cmd/server/internal/transaction"
 	"github.com/Ayupov-Ayaz/grpc/cmd/server/internal/wallet"
-	"github.com/Ayupov-Ayaz/grpc/gen/go/api/v1"
+	api "github.com/Ayupov-Ayaz/grpc/gen/go/aayupov/wallet/v1alpha1"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"

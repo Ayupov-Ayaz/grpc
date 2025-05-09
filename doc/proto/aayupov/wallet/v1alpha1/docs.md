@@ -3,36 +3,81 @@
 
 ## Table of Contents
 
-- [api/v1/transactions.proto](#api_v1_transactions-proto)
-    - [BetRequest](#api-v1-BetRequest)
-    - [BetResponse](#api-v1-BetResponse)
-    - [WinRequest](#api-v1-WinRequest)
-    - [WinResponse](#api-v1-WinResponse)
+- [aayupov/wallet/v1alpha1/error_details.proto](#aayupov_wallet_v1alpha1_error_details-proto)
+    - [ResourceType](#aayupov-wallet-v1alpha1-ResourceType)
+    - [ViolationType](#aayupov-wallet-v1alpha1-ViolationType)
   
-    - [TransactionService](#api-v1-TransactionService)
+- [aayupov/wallet/v1alpha1/transactions.proto](#aayupov_wallet_v1alpha1_transactions-proto)
+    - [BetRequest](#aayupov-wallet-v1alpha1-BetRequest)
+    - [BetResponse](#aayupov-wallet-v1alpha1-BetResponse)
+    - [WinRequest](#aayupov-wallet-v1alpha1-WinRequest)
+    - [WinResponse](#aayupov-wallet-v1alpha1-WinResponse)
   
-- [api/v1/wallet.proto](#api_v1_wallet-proto)
-    - [CreateWalletRequest](#api-v1-CreateWalletRequest)
-    - [CreateWalletResponse](#api-v1-CreateWalletResponse)
-    - [DeleteWalletRequest](#api-v1-DeleteWalletRequest)
-    - [DeleteWalletResponse](#api-v1-DeleteWalletResponse)
-    - [GetBalanceRequest](#api-v1-GetBalanceRequest)
-    - [GetBalanceResponse](#api-v1-GetBalanceResponse)
+    - [TransactionService](#aayupov-wallet-v1alpha1-TransactionService)
   
-    - [WalletService](#api-v1-WalletService)
+- [aayupov/wallet/v1alpha1/wallet.proto](#aayupov_wallet_v1alpha1_wallet-proto)
+    - [CreateWalletRequest](#aayupov-wallet-v1alpha1-CreateWalletRequest)
+    - [CreateWalletResponse](#aayupov-wallet-v1alpha1-CreateWalletResponse)
+    - [DeleteWalletRequest](#aayupov-wallet-v1alpha1-DeleteWalletRequest)
+    - [DeleteWalletResponse](#aayupov-wallet-v1alpha1-DeleteWalletResponse)
+    - [GetBalanceRequest](#aayupov-wallet-v1alpha1-GetBalanceRequest)
+    - [GetBalanceResponse](#aayupov-wallet-v1alpha1-GetBalanceResponse)
+  
+    - [WalletService](#aayupov-wallet-v1alpha1-WalletService)
   
 - [Scalar Value Types](#scalar-value-types)
 
 
 
-<a name="api_v1_transactions-proto"></a>
+<a name="aayupov_wallet_v1alpha1_error_details-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/v1/transactions.proto
+## aayupov/wallet/v1alpha1/error_details.proto
+
+
+ 
+
+
+<a name="aayupov-wallet-v1alpha1-ResourceType"></a>
+
+### ResourceType
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| RESOURCE_TYPE_UNSPECIFIED | 0 |  |
+| RESOURCE_TYPE_WALLET | 1 |  |
+| RESOURCE_TYPE_TRANSACTION | 2 |  |
 
 
 
-<a name="api-v1-BetRequest"></a>
+<a name="aayupov-wallet-v1alpha1-ViolationType"></a>
+
+### ViolationType
+
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| VIOLATION_TYPE_UNSPECIFIED | 0 |  |
+| VIOLATION_TYPE_INSUFFICIENT_FUNDS | 1 |  |
+
+
+ 
+
+ 
+
+ 
+
+
+
+<a name="aayupov_wallet_v1alpha1_transactions-proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## aayupov/wallet/v1alpha1/transactions.proto
+
+
+
+<a name="aayupov-wallet-v1alpha1-BetRequest"></a>
 
 ### BetRequest
 
@@ -40,7 +85,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| operation_id | [string](#string) |  |  |
+| id | [string](#string) |  |  |
 | user_id | [string](#string) |  |  |
 | amount | [uint64](#uint64) |  |  |
 
@@ -49,7 +94,7 @@
 
 
 
-<a name="api-v1-BetResponse"></a>
+<a name="aayupov-wallet-v1alpha1-BetResponse"></a>
 
 ### BetResponse
 
@@ -57,7 +102,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| operation_id | [string](#string) |  |  |
+| transaction_id | [string](#string) |  |  |
 | balance | [int64](#int64) |  |  |
 
 
@@ -65,7 +110,7 @@
 
 
 
-<a name="api-v1-WinRequest"></a>
+<a name="aayupov-wallet-v1alpha1-WinRequest"></a>
 
 ### WinRequest
 
@@ -73,8 +118,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| operation_id | [string](#string) |  |  |
-| bet_operation_id | [string](#string) |  |  |
+| id | [string](#string) |  |  |
+| bet_transaction_id | [string](#string) |  |  |
 | user_id | [string](#string) |  |  |
 | amount | [uint64](#uint64) |  |  |
 
@@ -83,7 +128,7 @@
 
 
 
-<a name="api-v1-WinResponse"></a>
+<a name="aayupov-wallet-v1alpha1-WinResponse"></a>
 
 ### WinResponse
 
@@ -91,7 +136,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| operation_id | [string](#string) |  |  |
+| transaction_id | [string](#string) |  |  |
 | balance | [int64](#int64) |  |  |
 
 
@@ -105,28 +150,28 @@
  
 
 
-<a name="api-v1-TransactionService"></a>
+<a name="aayupov-wallet-v1alpha1-TransactionService"></a>
 
 ### TransactionService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| Bet | [BetRequest](#api-v1-BetRequest) | [BetResponse](#api-v1-BetResponse) |  |
-| Win | [WinRequest](#api-v1-WinRequest) | [WinResponse](#api-v1-WinResponse) |  |
+| Bet | [BetRequest](#aayupov-wallet-v1alpha1-BetRequest) | [BetResponse](#aayupov-wallet-v1alpha1-BetResponse) |  |
+| Win | [WinRequest](#aayupov-wallet-v1alpha1-WinRequest) | [WinResponse](#aayupov-wallet-v1alpha1-WinResponse) |  |
 
  
 
 
 
-<a name="api_v1_wallet-proto"></a>
+<a name="aayupov_wallet_v1alpha1_wallet-proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## api/v1/wallet.proto
+## aayupov/wallet/v1alpha1/wallet.proto
 
 
 
-<a name="api-v1-CreateWalletRequest"></a>
+<a name="aayupov-wallet-v1alpha1-CreateWalletRequest"></a>
 
 ### CreateWalletRequest
 
@@ -142,7 +187,7 @@
 
 
 
-<a name="api-v1-CreateWalletResponse"></a>
+<a name="aayupov-wallet-v1alpha1-CreateWalletResponse"></a>
 
 ### CreateWalletResponse
 
@@ -157,7 +202,7 @@
 
 
 
-<a name="api-v1-DeleteWalletRequest"></a>
+<a name="aayupov-wallet-v1alpha1-DeleteWalletRequest"></a>
 
 ### DeleteWalletRequest
 
@@ -172,22 +217,17 @@
 
 
 
-<a name="api-v1-DeleteWalletResponse"></a>
+<a name="aayupov-wallet-v1alpha1-DeleteWalletResponse"></a>
 
 ### DeleteWalletResponse
 
 
 
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| wallet_id | [string](#string) |  |  |
 
 
 
 
-
-
-<a name="api-v1-GetBalanceRequest"></a>
+<a name="aayupov-wallet-v1alpha1-GetBalanceRequest"></a>
 
 ### GetBalanceRequest
 
@@ -202,7 +242,7 @@
 
 
 
-<a name="api-v1-GetBalanceResponse"></a>
+<a name="aayupov-wallet-v1alpha1-GetBalanceResponse"></a>
 
 ### GetBalanceResponse
 
@@ -210,7 +250,6 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| wallet_id | [string](#string) |  |  |
 | balance | [int64](#int64) |  |  |
 
 
@@ -224,16 +263,16 @@
  
 
 
-<a name="api-v1-WalletService"></a>
+<a name="aayupov-wallet-v1alpha1-WalletService"></a>
 
 ### WalletService
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
-| CreateWallet | [CreateWalletRequest](#api-v1-CreateWalletRequest) | [CreateWalletResponse](#api-v1-CreateWalletResponse) |  |
-| GetBalance | [GetBalanceRequest](#api-v1-GetBalanceRequest) | [GetBalanceResponse](#api-v1-GetBalanceResponse) |  |
-| DeleteWallet | [DeleteWalletRequest](#api-v1-DeleteWalletRequest) | [DeleteWalletResponse](#api-v1-DeleteWalletResponse) |  |
+| CreateWallet | [CreateWalletRequest](#aayupov-wallet-v1alpha1-CreateWalletRequest) | [CreateWalletResponse](#aayupov-wallet-v1alpha1-CreateWalletResponse) |  |
+| GetBalance | [GetBalanceRequest](#aayupov-wallet-v1alpha1-GetBalanceRequest) | [GetBalanceResponse](#aayupov-wallet-v1alpha1-GetBalanceResponse) |  |
+| DeleteWallet | [DeleteWalletRequest](#aayupov-wallet-v1alpha1-DeleteWalletRequest) | [DeleteWalletResponse](#aayupov-wallet-v1alpha1-DeleteWalletResponse) |  |
 
  
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/Ayupov-Ayaz/grpc/cmd/server/internal/transaction"
 	"github.com/Ayupov-Ayaz/grpc/cmd/server/internal/wallet"
-	"github.com/Ayupov-Ayaz/grpc/gen/go/api/v1"
+	api "github.com/Ayupov-Ayaz/grpc/gen/go/aayupov/wallet/v1alpha1"
 )
 
 type Application struct {
@@ -26,17 +26,17 @@ func NewApplication(
 	}
 }
 
-func (a *Application) CreateWallet(ctx context.Context, req *api.CreateWalletRequest) (*api.CreateWalletResponse, error) {
-	err := a.wallet.CreateWallet(req.UserId)
+func (a *Application) CreateWallet(
+	ctx context.Context, req *api.CreateWalletRequest,
+) (*api.CreateWalletResponse, error) {
+	err := a.wallet.CreateWallet(ctx, req.GetUserId())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapCreateWalletError(err)
 	}
 
-	balance, err := a.wallet.Add(req.GetUserId(), uint64(req.GetBalance()))
+	balance, err := a.wallet.Add(ctx, req.GetUserId(), uint64(req.GetBalance()))
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapChangeWalletError(err)
 	}
 
 	return &api.CreateWalletResponse{
@@ -44,44 +44,54 @@ func (a *Application) CreateWallet(ctx context.Context, req *api.CreateWalletReq
 	}, nil
 }
 
-func (a *Application) Bet(ctx context.Context, req *api.BetRequest) (*api.BetResponse, error) {
-	err := a.transaction.SetTransactionID(req.UserId, req.OperationId)
+func (a *Application) Bet(
+	ctx context.Context, req *api.BetRequest,
+) (*api.BetResponse, error) {
+	err := a.wallet.CheckWallet(ctx, req.GetUserId())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapChangeWalletError(err)
 	}
 
-	balance, err := a.wallet.Subtract(req.UserId, req.Amount)
+	err = a.transaction.SetTransactionID(ctx, req.GetUserId(), req.GetId())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapSetTransactionError(err)
+	}
+
+	balance, err := a.wallet.Subtract(ctx, req.GetUserId(), req.GetAmount())
+	if err != nil {
+		return nil, wrapChangeWalletError(err)
 	}
 
 	return &api.BetResponse{
-		Balance: balance,
+		Balance:       balance,
+		TransactionId: req.GetId(),
 	}, nil
 }
 
 func (a *Application) Win(ctx context.Context, req *api.WinRequest) (*api.WinResponse, error) {
-	err := a.transaction.CheckTransactionID(req.UserId, req.BetOperationId)
+	err := a.wallet.CheckWallet(ctx, req.GetUserId())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapChangeWalletError(err)
 	}
 
-	err = a.transaction.SetTransactionID(req.UserId, req.OperationId)
+	err = a.transaction.CheckTransactionID(ctx,
+		req.GetUserId(), req.GetBetTransactionId())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapCheckBetTransactionError(err)
 	}
 
-	balance, err := a.wallet.Add(req.UserId, req.Amount)
+	err = a.transaction.SetTransactionID(ctx, req.GetUserId(), req.GetId())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapSetTransactionError(err)
+	}
+
+	balance, err := a.wallet.Add(ctx, req.GetUserId(), req.GetAmount())
+	if err != nil {
+		return nil, wrapChangeWalletError(err)
 	}
 
 	return &api.WinResponse{
-		Balance: balance,
+		Balance:       balance,
+		TransactionId: req.GetId(),
 	}, nil
 }

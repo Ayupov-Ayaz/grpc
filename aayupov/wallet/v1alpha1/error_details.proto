@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package aayupov.wallet.v1alpha1;
+
+option go_package = "github.com/Ayupov-Ayaz/grpc/gen/go/aayupov/wallet/v1alpha1;wallet";
+
+enum ResourceType {
+    RESOURCE_TYPE_UNSPECIFIED = 0;
+    RESOURCE_TYPE_WALLET = 1;
+    RESOURCE_TYPE_TRANSACTION = 2;
+}
+
+enum ViolationType{
+    VIOLATION_TYPE_UNSPECIFIED = 0;
+    VIOLATION_TYPE_INSUFFICIENT_FUNDS = 1;
+}

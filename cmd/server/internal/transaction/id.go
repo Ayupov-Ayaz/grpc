@@ -8,6 +8,7 @@ const (
 	separator        = ":"
 	userIDIndex      = 0
 	operationIDIndex = 1
+	idComponentsLen  = 2
 )
 
 func newID(userID, operationID string) ID {
@@ -37,5 +38,5 @@ func (id ID) String() string {
 }
 
 func (id ID) split() []string {
-	return strings.Split(string(id), separator)
+	return strings.SplitN(string(id), separator, idComponentsLen)
 }

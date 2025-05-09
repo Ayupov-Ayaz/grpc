@@ -5,7 +5,7 @@ import (
 
 	"github.com/Ayupov-Ayaz/grpc/cmd/server/internal/transaction"
 	"github.com/Ayupov-Ayaz/grpc/cmd/server/internal/wallet"
-	"github.com/Ayupov-Ayaz/grpc/gen/go/api/v1"
+	api "github.com/Ayupov-Ayaz/grpc/gen/go/aayupov/wallet/v1alpha1"
 )
 
 type Application struct {
@@ -26,17 +26,17 @@ func NewApplication(
 	}
 }
 
-func (a *Application) CreateWallet(ctx context.Context, req *api.CreateWalletRequest) (*api.CreateWalletResponse, error) {
-	err := a.wallet.CreateWallet(req.UserId)
+func (a *Application) CreateWallet(
+	ctx context.Context, req *api.CreateWalletRequest,
+) (*api.CreateWalletResponse, error) {
+	err := a.wallet.CreateWallet(req.GetUserId())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapCreateWalletError(err)
 	}
 
 	balance, err := a.wallet.Add(req.GetUserId(), uint64(req.GetBalance()))
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapChangeWalletError(err)
 	}
 
 	return &api.CreateWalletResponse{
@@ -45,16 +45,14 @@ func (a *Application) CreateWallet(ctx context.Context, req *api.CreateWalletReq
 }
 
 func (a *Application) Bet(ctx context.Context, req *api.BetRequest) (*api.BetResponse, error) {
-	err := a.transaction.SetTransactionID(req.UserId, req.OperationId)
+	err := a.transaction.SetTransactionID(req.GetUserId(), req.GetId())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapSetTransactionError(err)
 	}
 
-	balance, err := a.wallet.Subtract(req.UserId, req.Amount)
+	balance, err := a.wallet.Subtract(req.GetUserId(), req.GetAmount())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapChangeWalletError(err)
 	}
 
 	return &api.BetResponse{
@@ -63,22 +61,19 @@ func (a *Application) Bet(ctx context.Context, req *api.BetRequest) (*api.BetRes
 }
 
 func (a *Application) Win(ctx context.Context, req *api.WinRequest) (*api.WinResponse, error) {
-	err := a.transaction.CheckTransactionID(req.UserId, req.BetOperationId)
+	err := a.transaction.CheckTransactionID(req.GetUserId(), req.GetBetTransactionId())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapCheckBetTransactionError(err)
 	}
 
-	err = a.transaction.SetTransactionID(req.UserId, req.OperationId)
+	err = a.transaction.SetTransactionID(req.GetUserId(), req.GetId())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapSetTransactionError(err)
 	}
 
-	balance, err := a.wallet.Add(req.UserId, req.Amount)
+	balance, err := a.wallet.Add(req.GetUserId(), req.GetAmount())
 	if err != nil {
-		// TODO: gRPC error
-		return nil, err
+		return nil, wrapChangeWalletError(err)
 	}
 
 	return &api.WinResponse{

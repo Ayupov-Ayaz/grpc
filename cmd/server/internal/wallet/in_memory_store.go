@@ -21,7 +21,7 @@ func (s *InMemoryStore) CreateWallet(userID string) error {
 	defer s.mu.Unlock()
 
 	if _, ok := s.userWallet[userID]; ok {
-		return ErrWalletAlreadyExists
+		return ErrAlreadyExist(userID)
 	}
 
 	s.userWallet[userID] = 0
@@ -55,7 +55,7 @@ func (s *InMemoryStore) Subtract(userID string, amount uint64) (int64, error) {
 	}
 
 	if balance < int64(amount) {
-		return 0, ErrInsufficientFunds
+		return 0, ErrInsufficientFunds(userID, amount, balance)
 	}
 
 	balance -= int64(amount)
@@ -77,6 +77,18 @@ func (s *InMemoryStore) GetBalance(userID string) (int64, error) {
 	return balance, nil
 }
 
+func (s *InMemoryStore) CheckWallet(userID string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	_, err := s.getBalance(userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *InMemoryStore) setBalance(userID string, balance int64) {
 	s.userWallet[userID] = balance
 }
@@ -86,5 +98,5 @@ func (s *InMemoryStore) getBalance(userID string) (int64, error) {
 		return balance, nil
 	}
 
-	return 0, ErrWalletNotFound
+	return 0, ErrNotFound(userID)
 }

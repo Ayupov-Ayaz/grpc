@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package aayupov.wallet.v1alpha1;
+
+option go_package = "github.com/Ayupov-Ayaz/grpc/gen/go/aayupov/wallet/v1alpha1;wallet";
+
+
+service TransactionService {
+  rpc Bet (BetRequest) returns (BetResponse){
+    option idempotency_level = IDEMPOTENT; // TODO: implement idempotency
+  };
+  rpc Win (WinRequest) returns (WinResponse){
+    option idempotency_level = IDEMPOTENT; // TODO: implement idempotency
+  };
+}
+
+message BetRequest {
+  string id = 1;
+  string user_id = 2;
+  uint64 amount = 3;
+}
+
+
+message BetResponse {
+  string transaction_id = 1;
+  int64 balance = 2;
+}
+
+
+message WinRequest {
+  string id = 1;
+  string bet_transaction_id = 2;
+  string user_id = 3;
+  uint64 amount = 4;
+}
+
+message WinResponse {
+  string transaction_id = 1;
+  int64 balance = 2;
+}

@@ -5,4 +5,5 @@ type Store interface {
 	Add(userID string, amount uint64) (int64, error)
 	Subtract(userID string, amount uint64) (int64, error)
 	GetBalance(userID string) (int64, error)
+	CheckWallet(userID string) error
 }

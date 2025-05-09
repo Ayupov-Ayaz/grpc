@@ -33,6 +33,7 @@ breaking:
     - FIELD_NO_DELETE
 deps:
   - buf.build/bufbuild/protovalidate
+  - buf.build/googleapis/googleapis
 lint:
   use:
     - STANDARD
